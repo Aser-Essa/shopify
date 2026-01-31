@@ -38,7 +38,7 @@
     "header": {
       "type": "header",
       "custom_css": [
-        "ul li {border: none;}"
+        "ul li a span {text-decoration: none;}"
       ],
       "settings": {
         "logo_position": "middle-left",
