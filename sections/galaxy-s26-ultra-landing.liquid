@@ -1,0 +1,527 @@
+{% comment %}
+  Galaxy S26 Ultra — premium editorial product landing section
+  Install: upload this file to /sections/galaxy-s26-ultra-landing.liquid.
+  Add it to a product template in the Shopify theme editor and select the product.
+  Uses Shopify product form + dynamic checkout; no fake/local-only cart.
+{% endcomment %}
+{% liquid
+  assign product_ref = section.settings.product
+  if product_ref == blank and product
+    assign product_ref = product
+  endif
+  assign current_variant = product_ref.selected_or_first_available_variant
+  assign hero_media = current_variant.featured_media | default: product_ref.featured_media | default: product_ref.media.first
+%}
+
+<section id="s26-landing-{{ section.id }}" class="s26" data-section-id="{{ section.id }}">
+  <div class="s26__announcement">
+    <span class="s26__eyebrow">{{ section.settings.kicker | escape }}</span>
+    <span class="s26__announcement-mark" aria-hidden="true"></span>
+    <span class="s26__eyebrow">{{ section.settings.top_note | escape }}</span>
+  </div>
+
+  <div class="s26__hero">
+    <div class="s26__hero-copy">
+      <p class="s26__eyebrow s26__muted">{{ section.settings.product_label | escape }}</p>
+      <h1>{{ section.settings.hero_heading | escape }}</h1>
+      <p class="s26__lede">{{ section.settings.hero_copy | escape }}</p>
+      <div class="s26__config" aria-label="Product configuration">
+        <span>256GB</span><i></i><span>12GB RAM</span><i></i><span>5G</span>
+      </div>
+
+      {% if product_ref != blank %}
+        <div class="s26__hero-buy">
+          <div class="s26__price-line">
+            <span class="s26__price" data-price>{{ current_variant.price | money }}</span>
+            {% if current_variant.compare_at_price > current_variant.price %}
+              <s class="s26__compare" data-compare-price>{{ current_variant.compare_at_price | money }}</s>
+            {% else %}
+              <s class="s26__compare" data-compare-price hidden></s>
+            {% endif %}
+          </div>
+          <p class="s26__tax-note">{{ section.settings.price_note | escape }}</p>
+          <a class="s26__button s26__button--primary" href="#s26-purchase-{{ section.id }}">{{ section.settings.primary_cta | escape }} <span aria-hidden="true">↗</span></a>
+          <a class="s26__text-link" href="#s26-features-{{ section.id }}">{{ section.settings.secondary_cta | escape }} <span aria-hidden="true">↓</span></a>
+        </div>
+      {% else %}
+        <div class="s26__setup-note">Select a product in this section’s theme settings to enable live pricing and purchasing.</div>
+      {% endif %}
+    </div>
+
+    <div class="s26__hero-art">
+      <div class="s26__art-glow" aria-hidden="true"></div>
+      {% if hero_media != blank %}
+        {{ hero_media | image_url: width: 1400 | image_tag: class: 's26__hero-image', widths: '480, 720, 960, 1200, 1400', sizes: '(min-width: 900px) 56vw, 100vw', loading: 'eager', fetchpriority: 'high', alt: hero_media.alt | default: product_ref.title }}
+      {% else %}
+        <div class="s26__image-placeholder">Add product media in Shopify to show the device here.</div>
+      {% endif %}
+      <div class="s26__art-caption"><span>GALAXY S SERIES</span><span>01 / ULTRA</span></div>
+    </div>
+    <div class="s26__hero-bottom"><span>DESIGNED TO GO BEYOND</span><span>SCROLL TO DISCOVER ↓</span></div>
+  </div>
+
+  <div class="s26__ticker" aria-label="Product highlights">
+    <span>PRECISION IN EVERY DETAIL</span><b>✳</b><span>INTELLIGENCE THAT FLOWS</span><b>✳</b><span>YOUR WORLD, IN ULTRA</span>
+  </div>
+
+  <section id="s26-features-{{ section.id }}" class="s26__features s26__section">
+    <div class="s26__section-intro">
+      <p class="s26__eyebrow s26__muted">01 — THE EXPERIENCE</p>
+      <h2>{{ section.settings.features_heading | escape }}</h2>
+      <p>{{ section.settings.features_intro | escape }}</p>
+    </div>
+    <div class="s26__feature-grid">
+      {% for block in section.blocks %}
+        {% if block.type == 'feature' %}
+          <article class="s26__feature s26__feature--{{ forloop.index }}" {{ block.shopify_attributes }}>
+            <div class="s26__feature-media">
+              {% if block.settings.image != blank %}
+                {{ block.settings.image | image_url: width: 1000 | image_tag: widths: '360, 600, 800, 1000', sizes: '(min-width: 900px) 42vw, 100vw', loading: 'lazy', alt: block.settings.image.alt | default: block.settings.title }}
+              {% else %}
+                <div class="s26__feature-placeholder"><span>{{ forloop.index | prepend: '0' }}</span></div>
+              {% endif %}
+              <span class="s26__feature-index">0{{ forloop.index }}</span>
+            </div>
+            <div class="s26__feature-text">
+              <p class="s26__eyebrow s26__muted">{{ block.settings.label | escape }}</p>
+              <h3>{{ block.settings.title | escape }}</h3>
+              <p>{{ block.settings.copy | escape }}</p>
+            </div>
+          </article>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="s26__camera">
+    <div class="s26__camera-image">
+      {% if section.settings.camera_image != blank %}
+        {{ section.settings.camera_image | image_url: width: 1800 | image_tag: widths: '600, 900, 1200, 1600, 1800', sizes: '100vw', loading: 'lazy', alt: section.settings.camera_image.alt | default: 'Galaxy S26 Ultra camera detail' }}
+      {% elsif hero_media != blank %}
+        {{ hero_media | image_url: width: 1400 | image_tag: widths: '600, 900, 1200, 1400', sizes: '100vw', loading: 'lazy', alt: 'Galaxy S26 Ultra product detail' }}
+      {% endif %}
+      <div class="s26__camera-overlay"></div>
+      <div class="s26__camera-copy">
+        <p class="s26__eyebrow">02 — CAMERA SYSTEM</p>
+        <h2>{{ section.settings.camera_heading | escape }}</h2>
+        <p>{{ section.settings.camera_copy | escape }}</p>
+        <div class="s26__camera-specs"><span><strong>200MP</strong><small>WIDE CAMERA</small></span><span><strong>100×</strong><small>DIGITAL ZOOM</small></span><span><strong>8K</strong><small>VIDEO RECORDING</small></span></div>
+      </div>
+    </div>
+    <p class="s26__disclaimer">{{ section.settings.camera_disclaimer | escape }}</p>
+  </section>
+
+  <section class="s26__display s26__section">
+    <div class="s26__display-copy">
+      <p class="s26__eyebrow s26__muted">03 — DISPLAY & DESIGN</p>
+      <h2>{{ section.settings.display_heading | escape }}</h2>
+      <p>{{ section.settings.display_copy | escape }}</p>
+      <div class="s26__stat-row"><div><strong>6.9″</strong><span>QHD+ DISPLAY</span></div><div><strong>120Hz</strong><span>ADAPTIVE REFRESH</span></div><div><strong>214g</strong><span>DEVICE WEIGHT*</span></div></div>
+      <p class="s26__micro">*Specifications may vary by market. Confirm the exact variant details before publishing.</p>
+    </div>
+    <div class="s26__display-art">
+      {% if section.settings.display_image != blank %}
+        {{ section.settings.display_image | image_url: width: 1400 | image_tag: widths: '480, 720, 1000, 1400', sizes: '(min-width: 900px) 50vw, 100vw', loading: 'lazy', alt: section.settings.display_image.alt | default: 'Galaxy S26 Ultra display and design' }}
+      {% elsif hero_media != blank %}
+        {{ hero_media | image_url: width: 1200 | image_tag: widths: '480, 720, 1000, 1200', sizes: '(min-width: 900px) 50vw, 100vw', loading: 'lazy', alt: 'Galaxy S26 Ultra' }}
+      {% endif %}
+    </div>
+  </section>
+
+  <section class="s26__ai">
+    <div class="s26__ai-orb" aria-hidden="true"></div>
+    <div class="s26__ai-content">
+      <p class="s26__eyebrow">04 — GALAXY AI</p>
+      <h2>{{ section.settings.ai_heading | escape }}</h2>
+      <p>{{ section.settings.ai_copy | escape }}</p>
+      <div class="s26__ai-tags"><span>CREATE</span><span>EDIT</span><span>GET THINGS DONE</span></div>
+    </div>
+    {% if section.settings.ai_image != blank %}
+      <div class="s26__ai-image">{{ section.settings.ai_image | image_url: width: 1000 | image_tag: widths: '400, 600, 800, 1000', sizes: '(min-width: 900px) 40vw, 100vw', loading: 'lazy', alt: section.settings.ai_image.alt | default: 'Galaxy AI experience' }}</div>
+    {% endif %}
+  </section>
+
+  <section class="s26__specs s26__section">
+    <div class="s26__section-intro">
+      <p class="s26__eyebrow s26__muted">05 — AT A GLANCE</p>
+      <h2>{{ section.settings.specs_heading | escape }}</h2>
+      <p>{{ section.settings.specs_intro | escape }}</p>
+    </div>
+    <div class="s26__spec-list">
+      {% assign specs = 'Display|6.9-inch QHD+ Dynamic AMOLED 2X, up to 120Hz;Main camera|200MP wide camera;Telephoto|50MP 5× optical zoom + 10MP 3× optical zoom;Ultra-wide|50MP;Front camera|12MP;Processor|Snapdragon 8 Elite Gen 5 for Galaxy;Battery|5,000mAh typical capacity;Connectivity|5G, Wi-Fi 7, Bluetooth 6.0;SIM|Dual SIM support;Memory & storage|12GB RAM / 256GB storage' | split: ';' %}
+      {% for item in specs %}
+        {% assign pair = item | split: '|' %}
+        <div class="s26__spec-row"><span>{{ pair[0] | escape }}</span><strong>{{ pair[1] | escape }}</strong></div>
+      {% endfor %}
+    </div>
+    <p class="s26__micro">Specifications are based on Samsung’s published Galaxy S26 Ultra information and may vary by market or exact SKU. Verify the selected product variant before publishing.</p>
+  </section>
+
+  {% if product_ref != blank %}
+    <section id="s26-purchase-{{ section.id }}" class="s26__purchase s26__section">
+      <div class="s26__purchase-art">
+        {% if hero_media != blank %}
+          {{ hero_media | image_url: width: 1200 | image_tag: class: 's26__purchase-image', widths: '400, 600, 800, 1000, 1200', sizes: '(min-width: 900px) 50vw, 100vw', loading: 'lazy', alt: hero_media.alt | default: product_ref.title }}
+        {% endif %}
+        <span class="s26__purchase-stamp">GALAXY<br>ULTRA</span>
+      </div>
+      <div class="s26__purchase-panel">
+        <p class="s26__eyebrow s26__muted">06 — MAKE IT YOURS</p>
+        <h2>{{ section.settings.purchase_heading | escape }}</h2>
+        <p class="s26__purchase-title">{{ product_ref.title | escape }}</p>
+        <div class="s26__purchase-price" data-price>{{ current_variant.price | money }}</div>
+        {% if current_variant.compare_at_price > current_variant.price %}
+          <s class="s26__compare" data-compare-price>{{ current_variant.compare_at_price | money }}</s>
+        {% else %}
+          <s class="s26__compare" data-compare-price hidden></s>
+        {% endif %}
+
+      
+      </div>
+    </section>
+  {% endif %}
+
+  <section class="s26__faq s26__section">
+    <div class="s26__section-intro">
+      <p class="s26__eyebrow s26__muted">07 — GOOD TO KNOW</p>
+      <h2>{{ section.settings.faq_heading | escape }}</h2>
+    </div>
+    <div class="s26__faq-list">
+      {% for block in section.blocks %}
+        {% if block.type == 'faq' %}
+          <details class="s26__faq-item" {{ block.shopify_attributes }}>
+            <summary>{{ block.settings.question | escape }}<span aria-hidden="true">+</span></summary>
+            <div class="s26__faq-answer">{{ block.settings.answer }}</div>
+          </details>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="s26__final">
+    <p class="s26__eyebrow">SAMSUNG GALAXY S26 ULTRA</p>
+    <h2>{{ section.settings.final_heading | escape }}</h2>
+    <p>{{ section.settings.final_copy | escape }}</p>
+    <a class="s26__button s26__button--light" href="#s26-purchase-{{ section.id }}">{{ section.settings.final_cta | escape }} <span aria-hidden="true">↗</span></a>
+  </section>
+
+  <footer class="s26__footer">
+    <span>{{ section.settings.footer_label | escape }}</span>
+    <a href="#s26-landing-{{ section.id }}">BACK TO TOP ↑</a>
+  </footer>
+
+  {% if product_ref != blank %}
+    <script type="application/json" data-product-json>{{ product_ref | json }}</script>
+  {% endif %}
+</section>
+
+<style>
+  #s26-landing-{{ section.id }}{--black:#08090b;--graphite:#15171b;--white:#fff;--silver:#d9dde3;--blue:#648cff;--muted:#9297a2;background:var(--black);color:var(--white);font-family:var(--font-body-family,Arial,sans-serif);overflow:hidden}
+  #s26-landing-{{ section.id }} *{box-sizing:border-box}
+  #s26-landing-{{ section.id }} a{color:inherit}
+  #s26-landing-{{ section.id }} .s26__eyebrow{font-size:10px;line-height:1.5;letter-spacing:.18em;font-weight:650;text-transform:uppercase;margin:0}
+  #s26-landing-{{ section.id }} .s26__muted{color:var(--muted)}
+  #s26-landing-{{ section.id }} .s26__announcement{display:flex;justify-content:center;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid #ffffff17}
+  #s26-landing-{{ section.id }} .s26__announcement-mark{width:4px;height:4px;border-radius:50%;background:var(--blue)}
+  #s26-landing-{{ section.id }} .s26__hero{position:relative;min-height:720px;display:grid;grid-template-columns:minmax(300px,.84fr) minmax(0,1.16fr);align-items:center;padding:64px clamp(24px,7vw,112px) 74px;gap:3vw;background:radial-gradient(ellipse at 73% 47%,#242b39 0, #111318 32%,#08090b 69%)}
+  #s26-landing-{{ section.id }} .s26__hero-copy{position:relative;z-index:2;max-width:540px}
+  #s26-landing-{{ section.id }} h1,#s26-landing-{{ section.id }} h2,#s26-landing-{{ section.id }} h3{font-family:var(--font-heading-family,var(--font-body-family,Arial,sans-serif));font-weight:500;letter-spacing:-.055em}
+  #s26-landing-{{ section.id }} h1{font-size:clamp(54px,7.4vw,108px);line-height:.94;margin:24px 0 24px;max-width:680px}
+  #s26-landing-{{ section.id }} .s26__lede{font-size:clamp(16px,1.5vw,20px);line-height:1.6;color:#c2c5cc;max-width:420px;margin:0}
+  #s26-landing-{{ section.id }} .s26__config{display:flex;align-items:center;gap:12px;margin:28px 0;color:#f2f3f6;font-size:11px;letter-spacing:.08em}
+  #s26-landing-{{ section.id }} .s26__config i{height:3px;width:3px;background:var(--blue);border-radius:50%}
+  #s26-landing-{{ section.id }} .s26__hero-buy{margin-top:30px}
+  #s26-landing-{{ section.id }} .s26__price-line{display:flex;gap:12px;align-items:baseline}
+  #s26-landing-{{ section.id }} .s26__price{font-size:25px;font-weight:550;letter-spacing:-.04em}
+  #s26-landing-{{ section.id }} .s26__compare{color:#8d929d;font-size:14px}
+  #s26-landing-{{ section.id }} .s26__tax-note{font-size:11px;color:#8e939d;margin:5px 0 22px}
+  #s26-landing-{{ section.id }} .s26__button{display:inline-flex;align-items:center;justify-content:space-between;gap:30px;text-decoration:none;border:1px solid transparent;padding:17px 20px;min-height:54px;font-size:12px;letter-spacing:.04em;font-weight:650;transition:transform .2s ease,background .2s ease,border-color .2s ease;cursor:pointer}
+  #s26-landing-{{ section.id }} .s26__button:hover{transform:translateY(-2px)}
+  #s26-landing-{{ section.id }} .s26__button--primary{background:var(--white);color:var(--black)!important;min-width:190px}
+  #s26-landing-{{ section.id }} .s26__button--primary:hover{background:#dce4ff}
+  #s26-landing-{{ section.id }} .s26__text-link{display:inline-flex;gap:12px;align-items:center;margin-left:20px;font-size:12px;text-decoration:none;color:#d0d3d9!important}
+  #s26-landing-{{ section.id }} .s26__hero-art{min-width:0;position:relative;display:flex;align-items:center;justify-content:center;min-height:500px}
+  #s26-landing-{{ section.id }} .s26__art-glow{position:absolute;width:75%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#7382a733 0, #343f5a20 38%,transparent 70%);filter:blur(18px)}
+  #s26-landing-{{ section.id }} .s26__hero-image{position:relative;width:100%;height:auto;max-height:620px;object-fit:contain;filter:drop-shadow(0 35px 55px #0009);animation:s26-float-{{ section.id }} 7s ease-in-out infinite}
+  #s26-landing-{{ section.id }} .s26__image-placeholder{border:1px dashed #ffffff44;padding:40px;color:#aeb3bf;max-width:300px;text-align:center}
+  #s26-landing-{{ section.id }} .s26__art-caption{position:absolute;bottom:4%;left:5%;right:5%;display:flex;justify-content:space-between;color:#9da3b0;font-size:9px;letter-spacing:.16em}
+  #s26-landing-{{ section.id }} .s26__hero-bottom{position:absolute;bottom:24px;left:clamp(24px,7vw,112px);right:clamp(24px,7vw,112px);display:flex;justify-content:space-between;color:#727783;font-size:9px;letter-spacing:.16em}
+  #s26-landing-{{ section.id }} .s26__ticker{display:flex;align-items:center;justify-content:center;gap:28px;flex-wrap:wrap;padding:22px 20px;border-top:1px solid #ffffff12;border-bottom:1px solid #ffffff12;color:#c5c8cf;font-size:9px;letter-spacing:.17em}
+  #s26-landing-{{ section.id }} .s26__ticker b{font-size:13px;color:var(--blue);font-weight:400}
+  #s26-landing-{{ section.id }} .s26__section{padding:clamp(70px,10vw,145px) clamp(24px,8vw,128px)}
+  #s26-landing-{{ section.id }} .s26__section-intro{display:grid;grid-template-columns:.7fr 1.3fr;column-gap:5vw;align-items:start;margin-bottom:55px}
+  #s26-landing-{{ section.id }} .s26__section-intro .s26__eyebrow{padding-top:12px}
+  #s26-landing-{{ section.id }} .s26__section-intro h2{font-size:clamp(38px,5.5vw,74px);line-height:1;margin:0;max-width:760px}
+  #s26-landing-{{ section.id }} .s26__section-intro>p:last-child{grid-column:2;color:#aeb3bd;line-height:1.7;max-width:580px;margin:20px 0 0;font-size:15px}
+  #s26-landing-{{ section.id }} .s26__feature-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px 28px}
+  #s26-landing-{{ section.id }} .s26__feature:nth-child(even){margin-top:100px}
+  #s26-landing-{{ section.id }} .s26__feature-media{position:relative;background:#14161b;aspect-ratio:1.16;overflow:hidden}
+  #s26-landing-{{ section.id }} .s26__feature-media img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+  #s26-landing-{{ section.id }} .s26__feature:hover .s26__feature-media img{transform:scale(1.035)}
+  #s26-landing-{{ section.id }} .s26__feature-index{position:absolute;top:18px;left:18px;font-size:10px;letter-spacing:.15em}
+  #s26-landing-{{ section.id }} .s26__feature-placeholder{height:100%;display:grid;place-items:center;background:radial-gradient(ellipse at center,#293041,#111318 70%);color:#8b96b2;font-size:60px;font-weight:200}
+  #s26-landing-{{ section.id }} .s26__feature-text{padding:22px 0 0;max-width:540px}
+  #s26-landing-{{ section.id }} .s26__feature-text h3{font-size:clamp(26px,3vw,38px);margin:12px 0}
+  #s26-landing-{{ section.id }} .s26__feature-text>p:last-child{font-size:14px;line-height:1.75;color:#aeb3bd;max-width:480px;margin:0}
+  #s26-landing-{{ section.id }} .s26__camera{padding:0 0 20px}
+  #s26-landing-{{ section.id }} .s26__camera-image{min-height:680px;position:relative;display:flex;align-items:flex-end;background:#121419;overflow:hidden}
+  #s26-landing-{{ section.id }} .s26__camera-image>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 45%}
+  #s26-landing-{{ section.id }} .s26__camera-overlay{position:absolute;inset:0;background:linear-gradient(90deg,#08090bf2 0%,#08090bc9 35%,#08090b33 75%),linear-gradient(0deg,#08090b88,transparent 55%)}
+  #s26-landing-{{ section.id }} .s26__camera-copy{position:relative;z-index:1;padding:clamp(35px,8vw,120px);max-width:850px}
+  #s26-landing-{{ section.id }} .s26__camera-copy h2{font-size:clamp(48px,7vw,96px);line-height:.96;margin:22px 0;max-width:720px}
+  #s26-landing-{{ section.id }} .s26__camera-copy>p:not(.s26__eyebrow){font-size:16px;line-height:1.75;color:#c2c6cf;max-width:490px}
+  #s26-landing-{{ section.id }} .s26__camera-specs{display:flex;gap:38px;margin-top:40px;flex-wrap:wrap}
+  #s26-landing-{{ section.id }} .s26__camera-specs span{display:flex;flex-direction:column;gap:7px}
+  #s26-landing-{{ section.id }} .s26__camera-specs strong{font-size:25px;font-weight:500;letter-spacing:-.04em}
+  #s26-landing-{{ section.id }} .s26__camera-specs small{font-size:9px;letter-spacing:.15em;color:#aeb4c0}
+  #s26-landing-{{ section.id }} .s26__disclaimer{font-size:10px;line-height:1.6;color:#777d88;padding:0 24px;text-align:center}
+  #s26-landing-{{ section.id }} .s26__display{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:5vw}
+  #s26-landing-{{ section.id }} .s26__display-copy h2{font-size:clamp(43px,5.5vw,76px);line-height:1;margin:24px 0}
+  #s26-landing-{{ section.id }} .s26__display-copy>p:not(.s26__eyebrow):not(.s26__micro){color:#b7bbc4;line-height:1.8;font-size:15px;max-width:500px}
+  #s26-landing-{{ section.id }} .s26__stat-row{display:flex;gap:28px;margin-top:42px;flex-wrap:wrap}
+  #s26-landing-{{ section.id }} .s26__stat-row div{display:flex;flex-direction:column;gap:7px}
+  #s26-landing-{{ section.id }} .s26__stat-row strong{font-size:24px;font-weight:500}
+  #s26-landing-{{ section.id }} .s26__stat-row span{font-size:8px;letter-spacing:.14em;color:#9da3ad}
+  #s26-landing-{{ section.id }} .s26__display-art{background:radial-gradient(ellipse,#2a3040,#111318 65%);min-height:420px;display:grid;place-items:center;overflow:hidden}
+  #s26-landing-{{ section.id }} .s26__display-art img{width:100%;height:100%;max-height:600px;object-fit:contain}
+  #s26-landing-{{ section.id }} .s26__micro{font-size:10px;line-height:1.6;color:#777e8b;margin-top:20px}
+  #s26-landing-{{ section.id }} .s26__ai{position:relative;isolation:isolate;display:flex;align-items:center;min-height:460px;padding:clamp(60px,9vw,130px) clamp(24px,8vw,128px);background:linear-gradient(110deg,#12151b,#0b0c10 70%)}
+  #s26-landing-{{ section.id }} .s26__ai-content{position:relative;z-index:2;max-width:640px}
+  #s26-landing-{{ section.id }} .s26__ai-content h2{font-size:clamp(48px,6.5vw,84px);line-height:.98;margin:22px 0}
+  #s26-landing-{{ section.id }} .s26__ai-content>p:not(.s26__eyebrow){color:#b7bdc8;line-height:1.8;max-width:500px}
+  #s26-landing-{{ section.id }} .s26__ai-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+  #s26-landing-{{ section.id }} .s26__ai-tags span{border:1px solid #ffffff29;padding:9px 12px;font-size:9px;letter-spacing:.12em;color:#d7dbe4}
+  #s26-landing-{{ section.id }} .s26__ai-orb{position:absolute;z-index:-1;right:9%;top:12%;width:min(40vw,420px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#879ed955,#648cff14 38%,transparent 70%);filter:blur(8px)}
+  #s26-landing-{{ section.id }} .s26__ai-image{position:absolute;right:5%;bottom:0;top:0;width:35%;display:flex;align-items:center;justify-content:center;opacity:.88}
+  #s26-landing-{{ section.id }} .s26__ai-image img{max-height:95%;max-width:100%;object-fit:contain}
+  #s26-landing-{{ section.id }} .s26__specs{background:#f0f1f3;color:#111318}
+  #s26-landing-{{ section.id }} .s26__specs .s26__section-intro .s26__muted{color:#666d78}
+  #s26-landing-{{ section.id }} .s26__specs .s26__section-intro>p:last-child{color:#5e6470}
+  #s26-landing-{{ section.id }} .s26__spec-list{border-top:1px solid #c9cbd0}
+  #s26-landing-{{ section.id }} .s26__spec-row{display:grid;grid-template-columns:.7fr 1.3fr;gap:5vw;padding:20px 0;border-bottom:1px solid #c9cbd0;font-size:13px}
+  #s26-landing-{{ section.id }} .s26__spec-row span{color:#676d76}
+  #s26-landing-{{ section.id }} .s26__spec-row strong{font-weight:550}
+  #s26-landing-{{ section.id }} .s26__specs .s26__micro{color:#686e78}
+  #s26-landing-{{ section.id }} .s26__purchase{display:grid;grid-template-columns:1fr 1fr;gap:clamp(35px,7vw,100px);align-items:center}
+  #s26-landing-{{ section.id }} .s26__purchase-art{position:relative;min-height:500px;display:grid;place-items:center;background:radial-gradient(ellipse,#272d3a,#111318 65%);overflow:hidden}
+  #s26-landing-{{ section.id }} .s26__purchase-image{width:100%;max-height:650px;object-fit:contain}
+  #s26-landing-{{ section.id }} .s26__purchase-stamp{position:absolute;bottom:20px;left:20px;font-size:10px;line-height:1.3;letter-spacing:.15em;color:#a7adba}
+  #s26-landing-{{ section.id }} .s26__purchase-panel h2{font-size:clamp(38px,5vw,65px);line-height:1;margin:22px 0}
+  #s26-landing-{{ section.id }} .s26__purchase-title{font-size:14px;color:#b6bbc5;line-height:1.6}
+  #s26-landing-{{ section.id }} .s26__purchase-price{font-size:28px;margin-top:20px;letter-spacing:-.04em}
+  #s26-landing-{{ section.id }} .s26__product-form{margin-top:28px}
+  #s26-landing-{{ section.id }} .s26__field-label{display:block;font-size:11px;color:#b7bdc8;margin-bottom:10px}
+  #s26-landing-{{ section.id }} .s26__select{display:block;width:100%;min-height:52px;background:#111318;color:#fff;border:1px solid #454a55;border-radius:0;padding:0 14px;font:inherit;font-size:13px;margin-bottom:22px}
+  #s26-landing-{{ section.id }} .s26__quantity-row{display:flex;align-items:center;justify-content:space-between;margin:22px 0}
+  #s26-landing-{{ section.id }} .s26__quantity-row .s26__field-label{margin:0}
+  #s26-landing-{{ section.id }} .s26__quantity-control{display:flex;align-items:center;border:1px solid #454a55}
+  #s26-landing-{{ section.id }} .s26__quantity-control button{width:38px;height:38px;background:transparent;color:white;border:0;font-size:18px;cursor:pointer}
+  #s26-landing-{{ section.id }} .s26__quantity-control input{width:42px;background:transparent;border:0;color:white;text-align:center;appearance:textfield}
+  #s26-landing-{{ section.id }} .s26__quantity-control input::-webkit-inner-spin-button{appearance:none}
+  #s26-landing-{{ section.id }} .s26__availability{font-size:11px;color:#b9c5e7;margin:12px 0}
+  #s26-landing-{{ section.id }} .s26__button--wide{width:100%;margin-top:8px}
+  #s26-landing-{{ section.id }} .s26__button:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  #s26-landing-{{ section.id }} .s26__dynamic-checkout{margin-top:12px}
+  #s26-landing-{{ section.id }} .s26__dynamic-checkout .shopify-payment-button__button{border-radius:0!important;min-height:52px!important}
+  #s26-landing-{{ section.id }} .s26__faq{display:grid;grid-template-columns:.75fr 1.25fr;gap:6vw;border-top:1px solid #ffffff18}
+  #s26-landing-{{ section.id }} .s26__faq .s26__section-intro{display:block;margin:0}
+  #s26-landing-{{ section.id }} .s26__faq .s26__section-intro h2{margin-top:24px}
+  #s26-landing-{{ section.id }} .s26__faq-list{border-top:1px solid #ffffff28}
+  #s26-landing-{{ section.id }} .s26__faq-item{border-bottom:1px solid #ffffff28}
+  #s26-landing-{{ section.id }} .s26__faq-item summary{display:flex;align-items:center;justify-content:space-between;gap:24px;cursor:pointer;list-style:none;padding:23px 0;font-size:14px}
+  #s26-landing-{{ section.id }} .s26__faq-item summary::-webkit-details-marker{display:none}
+  #s26-landing-{{ section.id }} .s26__faq-item summary span{font-size:22px;color:#8da7ff;transition:transform .2s}
+  #s26-landing-{{ section.id }} .s26__faq-item[open] summary span{transform:rotate(45deg)}
+  #s26-landing-{{ section.id }} .s26__faq-answer{font-size:13px;line-height:1.8;color:#aeb4bf;padding:0 40px 24px 0}
+  #s26-landing-{{ section.id }} .s26__final{text-align:center;padding:clamp(90px,13vw,180px) 24px;background:radial-gradient(ellipse at 50% 80%,#29344b 0,#101217 48%,#08090b 78%)}
+  #s26-landing-{{ section.id }} .s26__final h2{font-size:clamp(48px,8vw,106px);line-height:.96;max-width:900px;margin:25px auto}
+  #s26-landing-{{ section.id }} .s26__final>p:not(.s26__eyebrow){color:#b8bdc8;max-width:510px;margin:0 auto 28px;line-height:1.75;font-size:15px}
+  #s26-landing-{{ section.id }} .s26__button--light{background:white;color:#08090b!important}
+  #s26-landing-{{ section.id }} .s26__footer{display:flex;justify-content:space-between;gap:20px;padding:24px clamp(24px,8vw,128px);border-top:1px solid #ffffff1a;color:#818793;font-size:9px;letter-spacing:.13em}
+  #s26-landing-{{ section.id }} .s26__footer a{text-decoration:none}
+  #s26-landing-{{ section.id }} .s26__setup-note{border:1px solid #ffffff30;padding:18px;font-size:12px;line-height:1.6;color:#b8bec9;margin-top:24px}
+  #s26-landing-{{ section.id }} :focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+  @keyframes s26-float-{{ section.id }}{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @media(prefers-reduced-motion:reduce){#s26-landing-{{ section.id }} *,#s26-landing-{{ section.id }} *::before,#s26-landing-{{ section.id }} *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  @media(max-width:900px){
+    #s26-landing-{{ section.id }} .s26__hero{grid-template-columns:1fr;padding:60px 24px 70px;gap:10px;min-height:auto}
+    #s26-landing-{{ section.id }} .s26__hero-copy{max-width:680px}
+    #s26-landing-{{ section.id }} h1{font-size:clamp(54px,12vw,88px)}
+    #s26-landing-{{ section.id }} .s26__hero-art{min-height:300px;max-height:560px}
+    #s26-landing-{{ section.id }} .s26__hero-image{max-height:500px;max-width:740px}
+    #s26-landing-{{ section.id }} .s26__hero-bottom{left:24px;right:24px}
+    #s26-landing-{{ section.id }} .s26__section-intro{grid-template-columns:1fr;gap:20px}
+    #s26-landing-{{ section.id }} .s26__section-intro>p:last-child{grid-column:1;margin-top:0}
+    #s26-landing-{{ section.id }} .s26__display{grid-template-columns:1fr}
+    #s26-landing-{{ section.id }} .s26__display-art{min-height:320px}
+    #s26-landing-{{ section.id }} .s26__ai-image{opacity:.28;width:55%;right:-5%}
+    #s26-landing-{{ section.id }} .s26__purchase{grid-template-columns:1fr}
+    #s26-landing-{{ section.id }} .s26__purchase-art{min-height:350px}
+    #s26-landing-{{ section.id }} .s26__faq{grid-template-columns:1fr;gap:35px}
+    #s26-landing-{{ section.id }} .s26__camera-image{min-height:600px}
+  }
+  @media(max-width:560px){
+    #s26-landing-{{ section.id }} .s26__announcement{gap:8px;padding:12px 8px}
+    #s26-landing-{{ section.id }} .s26__eyebrow{font-size:8px}
+    #s26-landing-{{ section.id }} .s26__announcement .s26__eyebrow:last-child{max-width:38%;text-align:center}
+    #s26-landing-{{ section.id }} .s26__hero{padding-top:42px}
+    #s26-landing-{{ section.id }} .s26__hero-art{min-height:270px}
+    #s26-landing-{{ section.id }} .s26__config{gap:8px;font-size:9px}
+    #s26-landing-{{ section.id }} .s26__text-link{margin:18px 0 0;display:flex}
+    #s26-landing-{{ section.id }} .s26__ticker{gap:12px;font-size:7px}
+    #s26-landing-{{ section.id }} .s26__section{padding:72px 22px}
+    #s26-landing-{{ section.id }} .s26__feature-grid{grid-template-columns:1fr;gap:38px}
+    #s26-landing-{{ section.id }} .s26__feature:nth-child(even){margin-top:0}
+    #s26-landing-{{ section.id }} .s26__feature-media{aspect-ratio:1.05}
+    #s26-landing-{{ section.id }} .s26__camera-image{min-height:610px}
+    #s26-landing-{{ section.id }} .s26__camera-overlay{background:linear-gradient(0deg,#08090bf5 0%,#08090bb8 55%,#08090b2b 100%)}
+    #s26-landing-{{ section.id }} .s26__camera-copy{padding:32px 22px}
+    #s26-landing-{{ section.id }} .s26__camera-specs{gap:20px}
+    #s26-landing-{{ section.id }} .s26__camera-specs strong{font-size:21px}
+    #s26-landing-{{ section.id }} .s26__stat-row{gap:20px}
+    #s26-landing-{{ section.id }} .s26__spec-row{grid-template-columns:.75fr 1.25fr;gap:14px;font-size:11px;padding:17px 0}
+    #s26-landing-{{ section.id }} .s26__purchase-art{min-height:290px}
+    #s26-landing-{{ section.id }} .s26__footer{font-size:8px}
+  }
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById('s26-landing-{{ section.id }}');
+  if (!root || root.dataset.s26Ready === 'true') return;
+  root.dataset.s26Ready = 'true';
+
+  const variantSelect = root.querySelector('[data-variant-select]');
+  const addButton = root.querySelector('[data-add-button]');
+  const addLabel = root.querySelector('[data-add-label]');
+  const availability = root.querySelector('[data-availability]');
+  const priceNodes = root.querySelectorAll('[data-price]');
+  const compareNodes = root.querySelectorAll('[data-compare-price]');
+  const qty = root.querySelector('input[name="quantity"]');
+  const productJsonNode = root.querySelector('[data-product-json]');
+  let productData = null;
+  try { if (productJsonNode) productData = JSON.parse(productJsonNode.textContent); } catch (e) {}
+
+  const moneyFormat = {{ shop.money_format | json }};
+  const formatMoney = (cents) => {
+    if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+      return window.Shopify.formatMoney(cents, moneyFormat);
+    }
+    return (Number(cents || 0) / 100).toLocaleString(undefined, {style:'currency',currency: '{{ cart.currency.iso_code | default: shop.currency }}'});
+  };
+
+  const syncVariant = () => {
+    if (!variantSelect) return;
+    const option = variantSelect.options ? variantSelect.options[variantSelect.selectedIndex] : null;
+    if (!option) return;
+    const price = Number(option.dataset.price || 0);
+    const compare = Number(option.dataset.compare || 0);
+    const available = option.dataset.available === 'true';
+    priceNodes.forEach(node => { node.textContent = formatMoney(price); });
+    compareNodes.forEach(node => {
+      if (compare > price) { node.hidden = false; node.textContent = formatMoney(compare); }
+      else { node.hidden = true; node.textContent = ''; }
+    });
+    if (addButton) addButton.disabled = !available;
+    if (addLabel) addLabel.textContent = available ? {{ section.settings.add_to_cart | json }} : {{ section.settings.soldout_label | json }};
+    if (availability) availability.textContent = available ? {{ section.settings.available_label | json }} : {{ section.settings.soldout_label | json }};
+
+    const imageUrl = option.dataset.image;
+    if (imageUrl) {
+      root.querySelectorAll('.s26__hero-image, .s26__purchase-image').forEach(img => { img.src = imageUrl; });
+    }
+    if (productData && option.value) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('variant', option.value);
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
+
+  if (variantSelect && variantSelect.tagName === 'SELECT') variantSelect.addEventListener('change', syncVariant);
+  const minus = root.querySelector('[data-qty-minus]');
+  const plus = root.querySelector('[data-qty-plus]');
+  if (minus && qty) minus.addEventListener('click', () => { qty.value = Math.max(1, (parseInt(qty.value, 10) || 1) - 1); });
+  if (plus && qty) plus.addEventListener('click', () => { qty.value = Math.max(1, (parseInt(qty.value, 10) || 1) + 1); });
+  if (qty) qty.addEventListener('change', () => { qty.value = Math.max(1, parseInt(qty.value, 10) || 1); });
+  if (variantSelect) syncVariant();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Galaxy S26 Ultra landing",
+  "tag": "section",
+  "class": "section-galaxy-s26-ultra",
+  "settings": [
+    {"type":"product","id":"product","label":"Product"},
+    {"type":"text","id":"kicker","label":"Top left label","default":"SAMSUNG GALAXY"},
+    {"type":"text","id":"top_note","label":"Top right note","default":"ENGINEERED FOR WHAT’S NEXT"},
+    {"type":"text","id":"product_label","label":"Hero product label","default":"SAMSUNG GALAXY S26 ULTRA"},
+    {"type":"text","id":"hero_heading","label":"Hero headline","default":"Beyond the Ordinary."},
+    {"type":"textarea","id":"hero_copy","label":"Hero supporting text","default":"Powerful photography. Intelligent experiences. A new perspective on what your phone can do."},
+    {"type":"text","id":"price_note","label":"Price note","default":"Price and availability shown by your store."},
+    {"type":"text","id":"primary_cta","label":"Primary CTA","default":"Buy Now"},
+    {"type":"text","id":"secondary_cta","label":"Secondary CTA","default":"Explore Features"},
+    {"type":"text","id":"features_heading","label":"Features headline","default":"Built to move you."},
+    {"type":"textarea","id":"features_intro","label":"Features introduction","default":"A considered combination of camera innovation, immersive visuals, responsive power and useful intelligence."},
+    {"type":"image_picker","id":"camera_image","label":"Camera section image"},
+    {"type":"text","id":"camera_heading","label":"Camera headline","default":"Capture More Than You See."},
+    {"type":"textarea","id":"camera_copy","label":"Camera copy","default":"From detailed wide shots to distant subjects, a versatile multi-camera system gives you more ways to frame the moment."},
+    {"type":"text","id":"camera_disclaimer","label":"Camera image disclaimer","default":"Use verified Samsung sample images or store-owned product imagery. Do not imply illustrative photographs were captured on this device unless verified."},
+    {"type":"image_picker","id":"display_image","label":"Display section image"},
+    {"type":"text","id":"display_heading","label":"Display headline","default":"A view without limits."},
+    {"type":"textarea","id":"display_copy","label":"Display copy","default":"A spacious QHD+ display, adaptive refresh and refined hardware bring clarity to everything from focused work to late-night entertainment."},
+    {"type":"text","id":"ai_heading","label":"AI headline","default":"Your ideas, in a new light."},
+    {"type":"textarea","id":"ai_copy","label":"AI copy","default":"Galaxy AI tools can help with supported creative and everyday tasks. Feature availability and results may vary by language, region and software version."},
+    {"type":"image_picker","id":"ai_image","label":"AI section image"},
+    {"type":"text","id":"specs_heading","label":"Specifications headline","default":"The details that matter."},
+    {"type":"textarea","id":"specs_intro","label":"Specifications introduction","default":"A clear look at the core hardware. Confirm regional and variant-specific details before publishing."},
+    {"type":"text","id":"purchase_heading","label":"Purchase headline","default":"Make it yours."},
+    {"type":"checkbox","id":"show_dynamic_checkout","label":"Show accelerated checkout button","default":true},
+    {"type":"text","id":"available_label","label":"Available status label","default":"Available to add to cart"},
+    {"type":"text","id":"soldout_label","label":"Sold out label","default":"Sold out"},
+    {"type":"text","id":"add_to_cart","label":"Add to cart button label","default":"Add to Cart"},
+    {"type":"textarea","id":"purchase_note","label":"Purchase note","default":"Shipping, returns and warranty details are governed by your store policies."},
+    {"type":"text","id":"faq_heading","label":"FAQ headline","default":"Questions, answered."},
+    {"type":"text","id":"final_heading","label":"Final headline","default":"Make Every Moment Ultra."},
+    {"type":"textarea","id":"final_copy","label":"Final supporting text","default":"Discover a flagship experience built for the way you create, work, and capture the world."},
+    {"type":"text","id":"final_cta","label":"Final CTA","default":"Shop Galaxy S26 Ultra"},
+    {"type":"text","id":"footer_label","label":"Footer label","default":"GALAXY S26 ULTRA — PRODUCT EXPERIENCE"}
+  ],
+  "blocks": [
+    {
+      "type":"feature",
+      "name":"Feature block",
+      "settings":[
+        {"type":"text","id":"label","label":"Small label","default":"CAMERA SYSTEM"},
+        {"type":"text","id":"title","label":"Title","default":"Pro-grade photography"},
+        {"type":"textarea","id":"copy","label":"Description","default":"Explore a versatile camera system designed for detailed photos and flexible framing."},
+        {"type":"image_picker","id":"image","label":"Feature image"}
+      ]
+    },
+    {
+      "type":"faq",
+      "name":"FAQ item",
+      "settings":[
+        {"type":"text","id":"question","label":"Question","default":"Which storage and memory configuration is this?"},
+        {"type":"richtext","id":"answer","label":"Answer","default":"<p>This page is intended for the 12GB RAM / 256GB storage configuration. Verify the selected Shopify product and variant before publishing.</p>"}
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name":"Galaxy S26 Ultra landing",
+      "blocks":[
+        {"type":"feature","settings":{"label":"CAMERA SYSTEM","title":"Pro-grade photography","copy":"A versatile multi-camera setup gives you more flexibility to frame the scene."}},
+        {"type":"feature","settings":{"label":"DISPLAY","title":"Immersive by design","copy":"A spacious QHD+ display and adaptive refresh make everyday viewing feel fluid."}},
+        {"type":"feature","settings":{"label":"PERFORMANCE","title":"Power for your pace","copy":"Snapdragon 8 Elite Gen 5 for Galaxy supports demanding apps, multitasking and entertainment."}},
+        {"type":"feature","settings":{"label":"GALAXY AI","title":"More room for ideas","copy":"Explore supported AI tools for creative tasks and everyday productivity."}},
+        {"type":"faq","settings":{"question":"Does this configuration support 5G?","answer":"<p>Samsung lists 5G Sub-6 support for the Galaxy S26 Ultra. Actual support depends on your exact regional model and carrier.</p>"}},
+        {"type":"faq","settings":{"question":"Does it support two SIMs?","answer":"<p>The referenced listing is for a dual-SIM configuration. SIM type and combinations can vary by model and market; confirm the SKU details before purchase.</p>"}},
+        {"type":"faq","settings":{"question":"What is included in the box?","answer":"<p>Check the package contents supplied with your exact product listing. Do not assume accessories are included unless the store confirms them.</p>"}},
+        {"type":"faq","settings":{"question":"What are the warranty, shipping and return terms?","answer":"<p>Please refer to the store’s published warranty, shipping and returns policies for the current terms. No store-specific promise is made in this section.</p>"}}
+      ]
+    }
+  ]
+}
+{% endschema %}

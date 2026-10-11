@@ -10,11 +10,111 @@
 {
   "sections": {
     "main": {
-      "type": "main-page",
+      "type": "galaxy-s26-ultra-landing",
       "settings": {
-        "padding_top": 28,
-        "padding_bottom": 28
-      }
+        "kicker": "SAMSUNG GALAXY",
+        "top_note": "ENGINEERED FOR WHAT’S NEXT",
+        "product_label": "SAMSUNG GALAXY S26 ULTRA",
+        "hero_heading": "Beyond the Ordinary.",
+        "hero_copy": "Powerful photography. Intelligent experiences. A new perspective on what your phone can do.",
+        "price_note": "Price and availability shown by your store.",
+        "primary_cta": "Buy Now",
+        "secondary_cta": "Explore Features",
+        "features_heading": "Built to move you.",
+        "features_intro": "A considered combination of camera innovation, immersive visuals, responsive power and useful intelligence.",
+        "camera_heading": "Capture More Than You See.",
+        "camera_copy": "From detailed wide shots to distant subjects, a versatile multi-camera system gives you more ways to frame the moment.",
+        "camera_disclaimer": "Use verified Samsung sample images or store-owned product imagery. Do not imply illustrative photographs were captured on this device unless verified.",
+        "display_heading": "A view without limits.",
+        "display_copy": "A spacious QHD+ display, adaptive refresh and refined hardware bring clarity to everything from focused work to late-night entertainment.",
+        "ai_heading": "Your ideas, in a new light.",
+        "ai_copy": "Galaxy AI tools can help with supported creative and everyday tasks. Feature availability and results may vary by language, region and software version.",
+        "specs_heading": "The details that matter.",
+        "specs_intro": "A clear look at the core hardware. Confirm regional and variant-specific details before publishing.",
+        "purchase_heading": "Make it yours.",
+        "show_dynamic_checkout": true,
+        "available_label": "Available to add to cart",
+        "soldout_label": "Sold out",
+        "add_to_cart": "Add to Cart",
+        "purchase_note": "Shipping, returns and warranty details are governed by your store policies.",
+        "faq_heading": "Questions, answered.",
+        "final_heading": "Make Every Moment Ultra.",
+        "final_copy": "Discover a flagship experience built for the way you create, work, and capture the world.",
+        "final_cta": "Shop Galaxy S26 Ultra",
+        "footer_label": "GALAXY S26 ULTRA — PRODUCT EXPERIENCE"
+      },
+      "blocks": {
+        "feature_camera": {
+          "type": "feature",
+          "settings": {
+            "label": "CAMERA SYSTEM",
+            "title": "Pro-grade photography",
+            "copy": "A versatile multi-camera setup gives you more flexibility to frame the scene."
+          }
+        },
+        "feature_display": {
+          "type": "feature",
+          "settings": {
+            "label": "DISPLAY",
+            "title": "Immersive by design",
+            "copy": "A spacious QHD+ display and adaptive refresh make everyday viewing feel fluid."
+          }
+        },
+        "feature_performance": {
+          "type": "feature",
+          "settings": {
+            "label": "PERFORMANCE",
+            "title": "Power for your pace",
+            "copy": "Snapdragon 8 Elite Gen 5 for Galaxy supports demanding apps, multitasking and entertainment."
+          }
+        },
+        "feature_ai": {
+          "type": "feature",
+          "settings": {
+            "label": "GALAXY AI",
+            "title": "More room for ideas",
+            "copy": "Explore supported AI tools for creative tasks and everyday productivity."
+          }
+        },
+        "faq_5g": {
+          "type": "faq",
+          "settings": {
+            "question": "Does this configuration support 5G?",
+            "answer": "<p>Samsung lists 5G support for the Galaxy S26 Ultra. Actual support depends on your exact regional model and carrier.</p>"
+          }
+        },
+        "faq_sim": {
+          "type": "faq",
+          "settings": {
+            "question": "Does it support two SIMs?",
+            "answer": "<p>SIM type and combinations can vary by model and market; confirm the SKU details before purchase.</p>"
+          }
+        },
+        "faq_box": {
+          "type": "faq",
+          "settings": {
+            "question": "What is included in the box?",
+            "answer": "<p>Check the package contents supplied with your exact product listing. Do not assume accessories are included unless the store confirms them.</p>"
+          }
+        },
+        "faq_policies": {
+          "type": "faq",
+          "settings": {
+            "question": "What are the warranty, shipping and return terms?",
+            "answer": "<p>Please refer to the store’s published warranty, shipping and returns policies for the current terms.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_camera",
+        "feature_display",
+        "feature_performance",
+        "feature_ai",
+        "faq_5g",
+        "faq_sim",
+        "faq_box",
+        "faq_policies"
+      ]
     }
   },
   "order": [
